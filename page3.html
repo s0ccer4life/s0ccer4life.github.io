@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Snake Game</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  
+  <script>
+    // Set up the canvas and context
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    
+    // Set up the game variables
+    var snake = [{x: 10, y: 10}];
+    var food = {x: 5, y: 5};
+    var direction = "right";
+    
+    // Draw the Snake and the Food
+    function draw() {
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw the Snake
+      ctx.fillStyle = "green";
+      for (var i = 0; i < snake.length; i++) {
+        ctx.fillRect(snake[i].x * 10, snake[i].y * 10, 10, 10);
+      }
+      
+      // Draw the Food
+      ctx.fillStyle = "red";
+      ctx.fillRect(food.x * 10, food.y * 10, 10, 10);
+    }
+    
+    // Move the Snake
+    function move() {
+      // Get the head of the Snake
+      var head = snake[0];
+      
+      // Move the head in the direction
+      if (direction === "right") {
+        head = {x: head.x + 1, y: head.y};
+      } else if (direction === "left") {
+        head = {x: head.x - 1, y: head.y};
+      } else if (direction === "up") {
+        head = {x: head.x, y: head.y - 1};
+      } else if (direction === "down") {
+        head = {x: head.x, y: head.y + 1};
+      }
+      
+      // Add the new head to the Snake
+      snake.unshift(head);
+      
+      // Check if the Snake ate the Food
+      if (head.x === food.x && head.y === food.y) {
+        // Generate a new Food
+        food.x = Math.floor(Math.random() * canvas.width / 10);
+        food.y = Math.floor(Math.random() * canvas.height / 10);
+      } else {
+        // Remove the tail of the Snake
+        snake.pop();
+      }
+    }
+    
+    // Game loop
+    setInterval(function() {
+      move();
+      draw();
+    }, 100);
+    
+    // Handle keypresses
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "ArrowRight") {
+        direction = "right";
+      } else if (event.key === "ArrowLeft") {
+        direction = "left";
+      } else if (event.key === "ArrowUp") {
+        direction = "up";
+      } else if (event.key === "ArrowDown") {
+        direction = "down";
+      }
+    });
+  </script>
+</body>
+</html>
